@@ -12,7 +12,7 @@ import dagger.android.DaggerService
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class FoursquareService : DaggerService() {
+class CategoryService : DaggerService() {
 
     private val compositeDisposable = CompositeDisposable()
 

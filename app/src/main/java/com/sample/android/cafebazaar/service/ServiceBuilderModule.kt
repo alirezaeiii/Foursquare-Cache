@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ServiceBuilderModule {
 
     @ContributesAndroidInjector
-    internal abstract fun contributeFoursquareService(): FoursquareService
+    internal abstract fun contributeFoursquareService(): CategoryService
 }

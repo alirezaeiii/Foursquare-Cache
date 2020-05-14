@@ -21,7 +21,7 @@
         </activity>
 
         <service
-            android:name=".service.FoursquareService"
+            android:name=".service.CategoryService"
             android:exported="false"></service>
     </application>
 
