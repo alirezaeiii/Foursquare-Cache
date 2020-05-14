@@ -29,6 +29,8 @@ constructor() // Required empty public constructor
      */
     private lateinit var viewModelAdapter: MainAdapter
 
+    private lateinit var viewModel: MainViewModel
+
     private var binding: FragmentMainBinding? = null
 
     override fun onCreateView(
@@ -39,7 +41,7 @@ constructor() // Required empty public constructor
 
         if (binding == null) {
 
-            val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+            viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
             binding = FragmentMainBinding.inflate(inflater, container, false).apply {
                 setVariable(BR.vm, viewModel)
@@ -53,10 +55,6 @@ constructor() // Required empty public constructor
                         category
                     )
                 )
-            })
-
-            viewModel.category.observe(viewLifecycleOwner, Observer { categories ->
-                    viewModelAdapter.submitList(categories)
             })
 
             with(binding!!) {
@@ -73,5 +71,12 @@ constructor() // Required empty public constructor
         }
 
         return binding?.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.category.observe(viewLifecycleOwner, Observer { categories ->
+            viewModelAdapter.submitList(categories)
+        })
     }
 }
