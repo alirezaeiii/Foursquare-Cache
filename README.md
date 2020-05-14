@@ -1,6 +1,6 @@
 ### Prerequisites
 
-Add your [Foursquare](https://developer.foursquare.com/) Client_Id and Client_secret in the `local.properties` file :
+Add your [Foursquare](https://developer.foursquare.com/) CLIENT ID and CLIENT SECRET in the `local.properties` file :
 
 ```
 foursquare_client_id=YOUR_CLIENT_ID 
