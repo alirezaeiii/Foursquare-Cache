@@ -11,7 +11,6 @@ import com.sample.android.cafebazaar.domain.Category
 import com.sample.android.cafebazaar.repository.CategoryRepository
 import com.sample.android.cafebazaar.util.isNetworkAvailable
 import com.sample.android.cafebazaar.util.registerLocationListener
-import com.sample.android.cafebazaar.util.schedulars.BaseSchedulerProvider
 import javax.inject.Inject
 
 /**
@@ -21,10 +20,9 @@ import javax.inject.Inject
  * results after the new Fragment or Activity is available.
  */
 class MainViewModel(
-    schedulerProvider: BaseSchedulerProvider,
     private val repository: CategoryRepository,
     app: Application
-) : BaseViewModel(schedulerProvider) {
+) : BaseViewModel() {
 
     private val context = app
 
@@ -54,14 +52,13 @@ class MainViewModel(
      * Factory for constructing MainViewModel with parameter
      */
     class Factory @Inject constructor(
-        private val schedulerProvider: BaseSchedulerProvider,
         private val repository: CategoryRepository,
         private val app: Application
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModel(schedulerProvider, repository, app) as T
+                return MainViewModel(repository, app) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
