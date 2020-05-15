@@ -34,7 +34,7 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleTextAppearance="@style/ExpandedToolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:title="@{vm.venue.name}">
+                app:title="@{@string/likes(vm.venue.likeCount)}">
 
                 <ImageView
                     android:id="@+id/venue_poster"
@@ -73,6 +73,12 @@
                     style="@style/VenueMargin.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{vm.venue.name}" />
+
+                <TextView
+                    style="@style/VenueMargin.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@{vm.venue.address}" />
 
                 <TextView
@@ -81,12 +87,6 @@
                     android:layout_height="wrap_content"
                     android:text="@{vm.venue.hours}"
                     app:goneIfNull="@{vm.venue.hours}" />
-
-                <TextView
-                    style="@style/VenueMargin.Body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{@string/likes(vm.venue.likeCount)}" />
 
                 <TextView
                     style="@style/VenueMargin.Body"
