@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.sample.android.cafebazaar.R
 import com.sample.android.cafebazaar.service.CategoryService
@@ -22,27 +23,29 @@ class MainActivity : DaggerAppCompatActivity() {
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), PERMISSIONS_REQUEST_LOCATION
-            )
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), PERMISSIONS_REQUEST_LOCATION)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                PERMISSIONS_REQUEST_LOCATION)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { // Permission is granted
-                val intent = Intent(this, CategoryService::class.java)
-                startService(intent)
-            }
+        when (requestCode) {
+            PERMISSIONS_REQUEST_LOCATION ->
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { // Permission is granted
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                            PERMISSIONS_REQUEST_LOCATION_IN_BACKGROUND)
+                    }
+                }
+            PERMISSIONS_REQUEST_LOCATION_IN_BACKGROUND ->
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { // Permission is granted
+                    val intent = Intent(this, CategoryService::class.java)
+                    startService(intent)
+                } else {
+                    Toast.makeText(this, R.string.location_permission_in_background_not_granted, Toast.LENGTH_LONG).show()
+                }
         }
     }
 
@@ -55,3 +58,4 @@ class MainActivity : DaggerAppCompatActivity() {
 }
 
 private const val PERMISSIONS_REQUEST_LOCATION = 100
+private const val PERMISSIONS_REQUEST_LOCATION_IN_BACKGROUND = 200

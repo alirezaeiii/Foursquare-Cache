@@ -45,12 +45,7 @@ class CategoryService : DaggerService() {
     override fun onCreate() {
         super.onCreate()
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            5000L,
-            1000f,
-            locationListener
-        )
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000L, 1000f, locationListener)
     }
 
     override fun onDestroy() {

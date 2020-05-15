@@ -1,7 +1,8 @@
 package com.sample.android.cafebazaar.ui
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -9,7 +10,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -39,7 +42,7 @@ constructor() // Required empty public constructor
 
     private lateinit var viewModel: MainViewModel
 
-    private lateinit var locationManager: LocationManager
+    private var locationManager: LocationManager? = null
 
     //define the listener
     private val locationListener: LocationListener = object : LocationListener {
@@ -98,20 +101,19 @@ constructor() // Required empty public constructor
         return binding?.root
     }
 
-    @SuppressLint("MissingPermission")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            5000L,
-            100f,
-            locationListener
-        )
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(requireContext(), R.string.location_permission_not_granted, Toast.LENGTH_LONG).show()
+        } else {
+            locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000L, 100f, locationListener)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        locationManager.removeUpdates(locationListener)
+        locationManager?.removeUpdates(locationListener)
     }
 }
