@@ -38,6 +38,8 @@ class MainActivity : DaggerAppCompatActivity() {
                         requestPermissions(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
                             PERMISSIONS_REQUEST_LOCATION_IN_BACKGROUND)
                     }
+                } else {
+                    Toast.makeText(this, R.string.location_permission_not_granted, Toast.LENGTH_LONG).show()
                 }
             PERMISSIONS_REQUEST_LOCATION_IN_BACKGROUND ->
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { // Permission is granted
