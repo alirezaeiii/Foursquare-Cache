@@ -2,29 +2,11 @@ package com.sample.android.cafebazaar.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.LocationListener
-import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-
-fun registerLocationListener(context: Context, locationListener: LocationListener, minDistance: Float) {
-    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-    try {
-        // Request location updates
-        locationManager?.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            5000L,
-            minDistance,
-            locationListener
-        )
-    } catch (err: SecurityException) {
-        Timber.e("Security Exception, no location available")
-    }
-}
 
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(context: Context): Boolean {

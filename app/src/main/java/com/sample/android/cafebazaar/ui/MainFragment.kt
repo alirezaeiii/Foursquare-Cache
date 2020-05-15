@@ -1,5 +1,10 @@
 package com.sample.android.cafebazaar.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.sample.android.cafebazaar.BR
 import com.sample.android.cafebazaar.R
 import com.sample.android.cafebazaar.databinding.FragmentMainBinding
+import com.sample.android.cafebazaar.util.isNetworkAvailable
 import com.sample.android.cafebazaar.util.setupActionBar
 import com.sample.android.cafebazaar.viewmodels.MainViewModel
 import com.sample.android.cafebazaar.widget.MarginDecoration
@@ -31,6 +37,23 @@ constructor() // Required empty public constructor
 
     private var binding: FragmentMainBinding? = null
 
+    private lateinit var viewModel: MainViewModel
+
+    private lateinit var locationManager: LocationManager
+
+    //define the listener
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            if (isNetworkAvailable(requireContext())) {
+                viewModel.updateLocations(location)
+            }
+        }
+
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +62,7 @@ constructor() // Required empty public constructor
 
         if (binding == null) {
 
-            val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+            viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
             binding = FragmentMainBinding.inflate(inflater, container, false).apply {
                 setVariable(BR.vm, viewModel)
@@ -73,5 +96,22 @@ constructor() // Required empty public constructor
         }
 
         return binding?.root
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            5000L,
+            100f,
+            locationListener
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationManager.removeUpdates(locationListener)
     }
 }
