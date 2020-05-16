@@ -4,7 +4,6 @@ import android.app.Application
 import com.sample.android.cafebazaar.FoursquareApplication
 import com.sample.android.cafebazaar.database.DatabaseModule
 import com.sample.android.cafebazaar.network.Network
-import com.sample.android.cafebazaar.service.ServiceBuilderModule
 
 import javax.inject.Singleton
 
@@ -20,8 +19,7 @@ import dagger.android.support.AndroidSupportInjectionModule
         ApplicationModule::class,
         BaseModule::class,
         Network::class,
-        DatabaseModule::class,
-        ServiceBuilderModule::class]
+        DatabaseModule::class]
 )
 interface AppComponent : AndroidInjector<FoursquareApplication> {
 
