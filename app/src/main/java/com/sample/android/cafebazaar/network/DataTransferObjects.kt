@@ -66,7 +66,7 @@ class VenueWrapper(
     val location: Location,
     val likes: Likes,
     val hours: Hours?,
-    val bestPhoto: BestPhoto,
+    val bestPhoto: BestPhoto?,
     val description: String?
 )
 
@@ -101,6 +101,6 @@ fun VenueWrapper.asDomainModel() =
                 location.country,
         likeCount = likes.count,
         hours = hours?.status,
-        photoUrl = bestPhoto.prefix + "456" + bestPhoto.suffix,
+        photoUrl = bestPhoto?.prefix + "456" + bestPhoto?.suffix,
         description = description
     )
