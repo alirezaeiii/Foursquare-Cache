@@ -35,11 +35,6 @@ constructor() // Required empty public constructor
     @Inject
     lateinit var factory: MainViewModel.Factory
 
-    /**
-     * RecyclerView Adapter for converting a list of categories to cards.
-     */
-    private lateinit var viewModelAdapter: MainAdapter
-
     private var binding: FragmentMainBinding? = null
 
     private lateinit var viewModel: MainViewModel
@@ -88,7 +83,7 @@ constructor() // Required empty public constructor
                 lifecycleOwner = viewLifecycleOwner
             }
 
-            viewModelAdapter = MainAdapter(MainAdapter.OnClickListener { category ->
+            val viewModelAdapter = MainAdapter(MainAdapter.OnClickListener { category ->
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToDetailFragment(
                         category
