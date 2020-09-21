@@ -17,7 +17,6 @@ import dagger.android.support.AndroidSupportInjectionModule
     modules = [ActivityBindingModule::class,
         AndroidSupportInjectionModule::class,
         ApplicationModule::class,
-        BaseModule::class,
         Network::class,
         DatabaseModule::class]
 )

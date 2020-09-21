@@ -2,6 +2,8 @@ package com.sample.android.cafebazaar.di
 
 import android.app.Application
 import android.content.Context
+import com.sample.android.cafebazaar.util.schedulars.BaseSchedulerProvider
+import com.sample.android.cafebazaar.util.schedulars.SchedulerProvider
 import dagger.Binds
 import dagger.Module
 
@@ -19,4 +21,7 @@ abstract class ApplicationModule {
     //expose Application as an injectable context
     @Binds
     internal abstract fun bindContext(application: Application): Context
+
+    @Binds
+    internal abstract fun bindSchedulerProvider(schedulerProvider: SchedulerProvider): BaseSchedulerProvider
 }
