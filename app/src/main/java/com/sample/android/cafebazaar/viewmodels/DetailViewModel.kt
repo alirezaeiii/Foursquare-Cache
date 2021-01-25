@@ -24,8 +24,8 @@ class DetailViewModel(
     private val venueId: String
 ) : BaseViewModel(schedulerProvider) {
 
-    private val _liveData = MutableLiveData<Resource<Venue>>()
-    val liveData: LiveData<Resource<Venue>>
+    private val _liveData = MutableLiveData<Resource<Nothing>>()
+    val liveData: LiveData<Resource<Nothing>>
         get() = _liveData
 
     private val _venue = MutableLiveData<Venue>()
@@ -41,7 +41,7 @@ class DetailViewModel(
         composeObservable { api.getVenue(venueId) }
             .subscribe({ responseNetworkWrapper ->
                 val venue = responseNetworkWrapper.response.venue.asDomainModel()
-                _liveData.postValue(Resource.Success(venue))
+                _liveData.postValue(Resource.Success(null))
                 _venue.postValue(venue)
             }) {
                 _liveData.postValue(Resource.Failure(it.localizedMessage))
