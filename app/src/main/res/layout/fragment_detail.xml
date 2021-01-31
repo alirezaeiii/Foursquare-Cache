@@ -10,6 +10,10 @@
             name="vm"
             type="com.sample.android.cafebazaar.viewmodels.DetailViewModel" />
 
+        <variable
+            name="venue"
+            type="com.sample.android.cafebazaar.domain.Venue" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -34,14 +38,14 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleTextAppearance="@style/ExpandedToolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:title="@{@string/likes(vm.venue.likeCount)}">
+                app:title="@{@string/likes(venue.likeCount)}">
 
                 <ImageView
                     android:id="@+id/venue_poster"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{vm.venue.photoUrl}"
+                    app:imageUrl="@{venue.photoUrl}"
                     app:layout_collapseMode="parallax"
                     tools:ignore="contentDescription" />
 
@@ -73,26 +77,26 @@
                     style="@style/VenueMargin.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.venue.name}" />
+                    android:text="@{venue.name}" />
 
                 <TextView
                     style="@style/VenueMargin.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.venue.address}" />
+                    android:text="@{venue.address}" />
 
                 <TextView
                     style="@style/VenueMargin.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.venue.hours}"
-                    app:goneIfNull="@{vm.venue.hours}" />
+                    android:text="@{venue.hours}"
+                    app:goneIfNull="@{venue.hours}" />
 
                 <TextView
                     style="@style/VenueMargin.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.venue.description}" />
+                    android:text="@{venue.description}" />
 
             </LinearLayout>
 
@@ -117,6 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:onClick="@{()->vm.showVenue()}"
                 android:text="@string/retry" />
 
         </LinearLayout>

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sample.android.cafebazaar.BR
 import com.sample.android.cafebazaar.databinding.FragmentDetailBinding
+import com.sample.android.cafebazaar.util.Resource
 import com.sample.android.cafebazaar.viewmodels.DetailViewModel
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -21,7 +23,7 @@ constructor() // Required empty public constructor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
 
@@ -36,9 +38,11 @@ constructor() // Required empty public constructor
                 setNavigationOnClickListener { findNavController().navigateUp() }
             }
 
-            retryBtn.setOnClickListener {
-                viewModel.showVenue()
-            }
+            viewModel.liveData.observe(viewLifecycleOwner, Observer { resource ->
+                if(resource is Resource.Success) {
+                    venue = resource.data
+                }
+            })
         }
 
         return binding.root
