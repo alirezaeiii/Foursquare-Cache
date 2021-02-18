@@ -6,7 +6,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -29,10 +29,10 @@ import javax.inject.Singleton
 interface FoursquareService {
 
     @GET("v2/venues/explore")
-    fun getCategories(@Query("ll") latLon: String): Observable<ResponseWrapper>
+    fun getCategories(@Query("ll") latLon: String): Single<ResponseWrapper>
 
     @GET("v2/venues/{VENUE_ID}")
-    fun getVenue(@Path("VENUE_ID") id : String) : Observable<ResponseNetworkWrapper>
+    fun getVenue(@Path("VENUE_ID") id : String) : Single<ResponseNetworkWrapper>
 }
 
 @Singleton
@@ -73,9 +73,9 @@ class Network {
     @Singleton
     fun provideOkHttpClient(requestInterceptor: RequestInterceptor): OkHttpClient {
 
-        val logger = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
+        val logger = HttpLoggingInterceptor {
             Timber.d(it)
-        })
+        }
         logger.level = HttpLoggingInterceptor.Level.BASIC
 
         return OkHttpClient.Builder()

@@ -34,7 +34,7 @@ class DetailViewModel(
 
     fun showVenue() {
         _liveData.value = Resource.Loading()
-        composeObservable { api.getVenue(venueId) }
+        composeSingle { api.getVenue(venueId) }
             .subscribe({ responseNetworkWrapper ->
                 val venue = responseNetworkWrapper.response.venue.asDomainModel()
                 _liveData.postValue(Resource.Success(venue))

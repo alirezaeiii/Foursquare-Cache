@@ -3,7 +3,7 @@ package com.sample.android.cafebazaar.viewmodels
 import androidx.lifecycle.ViewModel
 import com.sample.android.cafebazaar.util.EspressoIdlingResource
 import com.sample.android.cafebazaar.util.schedulars.BaseSchedulerProvider
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 open class BaseViewModel @JvmOverloads constructor(
@@ -12,7 +12,7 @@ open class BaseViewModel @JvmOverloads constructor(
 
     protected val compositeDisposable = CompositeDisposable()
 
-    protected fun <T> composeObservable(task: () -> Observable<T>): Observable<T> = task()
+    protected fun <T> composeSingle(task: () -> Single<T>): Single<T> = task()
         .doOnSubscribe { EspressoIdlingResource.increment() } // App is busy until further notice
         .subscribeOn(schedulerProvider?.io())
         .observeOn(schedulerProvider?.ui())
