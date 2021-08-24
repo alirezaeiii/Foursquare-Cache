@@ -35,7 +35,9 @@ constructor() // Required empty public constructor
     @Inject
     lateinit var factory: MainViewModel.Factory
 
-    private var binding: FragmentMainBinding? = null
+    private var _binding: FragmentMainBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
 
@@ -58,9 +60,9 @@ constructor() // Required empty public constructor
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        if (binding == null) {
+        if (_binding == null) {
 
             locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
 
@@ -77,7 +79,7 @@ constructor() // Required empty public constructor
 
             viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
-            binding = FragmentMainBinding.inflate(inflater, container, false).apply {
+            _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
                 setVariable(BR.vm, viewModel)
                 // Set the lifecycleOwner so DataBinding can observe LiveData
                 lifecycleOwner = viewLifecycleOwner
@@ -95,7 +97,7 @@ constructor() // Required empty public constructor
                 viewModelAdapter.submitList(categories)
             })
 
-            with(binding!!) {
+            with(binding) {
                 list.apply {
                     addItemDecoration(MarginDecoration(context))
                     setHasFixedSize(true)
@@ -108,7 +110,7 @@ constructor() // Required empty public constructor
             }
         }
 
-        return binding?.root
+        return binding.root
     }
 
     @SuppressLint("MissingPermission")
