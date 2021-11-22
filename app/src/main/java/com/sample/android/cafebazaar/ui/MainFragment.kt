@@ -1,5 +1,6 @@
 package com.sample.android.cafebazaar.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.location.LocationListener
@@ -36,7 +37,6 @@ constructor() // Required empty public constructor
 
     private lateinit var locationManager: LocationManager
 
-    //define the listener
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if (isNetworkAvailable(requireContext())) {
@@ -51,8 +51,8 @@ constructor() // Required empty public constructor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        initLocationManager()
     }
 
     override fun onCreateView(
@@ -60,35 +60,35 @@ constructor() // Required empty public constructor
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-            _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
-                setVariable(BR.vm, viewModel)
-                // Set the lifecycleOwner so DataBinding can observe LiveData
-                lifecycleOwner = viewLifecycleOwner
-            }
+        _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
+            setVariable(BR.vm, viewModel)
+            // Set the lifecycleOwner so DataBinding can observe LiveData
+            lifecycleOwner = viewLifecycleOwner
+        }
 
-            val viewModelAdapter = MainAdapter(MainAdapter.OnClickListener { category ->
-                findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToDetailFragment(
-                        category
-                    )
+        val viewModelAdapter = MainAdapter(MainAdapter.OnClickListener { category ->
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToDetailFragment(
+                    category
                 )
-            })
+            )
+        })
 
-            viewModel.category.observe(viewLifecycleOwner, { categories ->
-                viewModelAdapter.submitList(categories)
-            })
+        viewModel.category.observe(viewLifecycleOwner, { categories ->
+            viewModelAdapter.submitList(categories)
+        })
 
-            with(binding) {
-                list.apply {
-                    addItemDecoration(MarginDecoration(context))
-                    setHasFixedSize(true)
-                    adapter = viewModelAdapter
-                }
-
-                (activity as AppCompatActivity).setupActionBar(toolbar) {
-                    setTitle(R.string.app_name)
-                }
+        with(binding) {
+            list.apply {
+                addItemDecoration(MarginDecoration(context))
+                setHasFixedSize(true)
+                adapter = viewModelAdapter
             }
+
+            (activity as AppCompatActivity).setupActionBar(toolbar) {
+                setTitle(R.string.app_name)
+            }
+        }
 
         return binding.root
     }
@@ -101,5 +101,16 @@ constructor() // Required empty public constructor
     override fun onDestroy() {
         super.onDestroy()
         locationManager.removeUpdates(locationListener)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun initLocationManager() {
+        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            5000L,
+            100f,
+            locationListener
+        )
     }
 }
