@@ -35,6 +35,22 @@ android {
     dataBinding {
         enabled = true
     }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = version_compose
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -44,8 +60,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$version_support"
     implementation "com.google.android.material:material:$version_material"
     implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
-    implementation "android.arch.persistence.room:runtime:$version_room"
-    kapt  "android.arch.persistence.room:compiler:$version_room"
+    implementation "androidx.room:room-runtime:$version_room"
+    kapt  "androidx.room:room-compiler:$version_room"
     implementation "androidx.test.espresso:espresso-idling-resource:$version_espresso"
 
     // Android KTX
@@ -68,6 +84,14 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$version_dagger"
     implementation "com.google.dagger:dagger-android-support:$version_dagger"
     kapt "com.google.dagger:dagger-android-processor:$version_dagger"
+
+    // coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_coroutines"
+
+    // Jetpack compose
+    implementation "androidx.compose.ui:ui:${version_compose}"
+    implementation "androidx.compose.material:material:${version_compose}"
+    implementation "androidx.activity:activity-compose:${version_activity_compose}"
 
     // Network
     implementation "com.squareup.okhttp3:logging-interceptor:$version_okhttp"
@@ -93,9 +117,6 @@ dependencies {
     // Espresso UI Testing
     androidTestImplementation "androidx.test.espresso:espresso-core:$version_espresso"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$version_espresso"
-
-    // Testing Architecture components
-    testImplementation "android.arch.core:core-testing:$version_lifecycle_extensions"
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation "androidx.test:runner:$version_runner"

@@ -8,7 +8,8 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector(
-        modules = [MainModule::class,
+        modules = [PermissionModule::class,
+            MainModule::class,
             DetailModule::class]
     )
     internal abstract fun mainActivity(): MainActivity
