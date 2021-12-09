@@ -49,7 +49,13 @@ constructor() // Required empty public constructor
         savedInstanceState: Bundle?
     ): View = composeView {
         viewModel = ViewModelProvider(this).get(PermissionViewModel::class.java)
-        when (viewModel.mutableState.collectAsState().value) {
+        val state = viewModel.mutableState.collectAsState().value
+        Content(state)
+    }
+
+    @Composable
+    private fun Content(state: PermissionViewModel.State) {
+        when (state) {
             PermissionViewModel.State.PERMISSION_DIALOG -> {
                 Timber.i("Check for permission")
                 PermissionDialog()
