@@ -27,13 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.sample.android.cafebazaar.R
 import com.sample.android.cafebazaar.util.composeView
 import com.sample.android.cafebazaar.viewmodels.PermissionViewModel
 import dagger.android.support.DaggerFragment
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,7 +48,7 @@ constructor() // Required empty public constructor
     ): View = composeView {
         viewModel = ViewModelProvider(this).get(PermissionViewModel::class.java)
         val state = viewModel.mutableState.collectAsState().value
-        Content(state)
+        Content(state = state)
     }
 
     @Composable
@@ -79,10 +77,8 @@ constructor() // Required empty public constructor
         val permissionStatus =
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
         if (PackageManager.PERMISSION_GRANTED == permissionStatus) {
-            LaunchedEffect(Unit) {
                 Timber.i("Permission was granted")
                 viewModel.setState(PermissionViewModel.State.NEXT_SCREEN)
-            }
         } else {
             RequestPermission()
         }
@@ -95,9 +91,7 @@ constructor() // Required empty public constructor
         ) { permissions ->
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
                 Timber.i("Permission is granted")
-                lifecycleScope.launch {
-                    viewModel.setState(PermissionViewModel.State.NEXT_SCREEN)
-                }
+                viewModel.setState(PermissionViewModel.State.NEXT_SCREEN)
             } else {
                 Timber.i("Permission is not granted")
                 viewModel.setState(PermissionViewModel.State.PERMISSION_DENIED)
