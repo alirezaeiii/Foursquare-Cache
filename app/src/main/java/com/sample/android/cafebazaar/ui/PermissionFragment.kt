@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.sample.android.cafebazaar.R
 import com.sample.android.cafebazaar.util.composeView
@@ -39,14 +39,13 @@ class PermissionFragment @Inject
 constructor() // Required empty public constructor
     : DaggerFragment() {
 
-    private lateinit var viewModel: PermissionViewModel
+    private val viewModel: PermissionViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = composeView {
-        viewModel = ViewModelProvider(this).get(PermissionViewModel::class.java)
         val state = viewModel.mutableState.collectAsState().value
         Content(state = state)
     }
@@ -77,8 +76,8 @@ constructor() // Required empty public constructor
         val permissionStatus =
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
         if (PackageManager.PERMISSION_GRANTED == permissionStatus) {
-                Timber.i("Permission was granted")
-                viewModel.setState(PermissionViewModel.State.NEXT_SCREEN)
+            Timber.i("Permission was granted")
+            viewModel.setState(PermissionViewModel.State.NEXT_SCREEN)
         } else {
             RequestPermission()
         }

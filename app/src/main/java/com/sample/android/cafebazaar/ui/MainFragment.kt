@@ -33,7 +33,9 @@ constructor() // Required empty public constructor
 
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    }
 
     private lateinit var locationManager: LocationManager
 
@@ -51,7 +53,6 @@ constructor() // Required empty public constructor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         initLocationManager()
     }
 
